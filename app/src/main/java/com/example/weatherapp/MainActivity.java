@@ -46,9 +46,6 @@ public class MainActivity extends AppCompatActivity {
         btn_cityID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                // Instantiate the RequestQueue.
-                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
                 String url ="https://www.metaweather.com/api/location/search/?query=" + et_dataInput.getText().toString();
 
                 JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -61,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                         Toast.makeText(MainActivity.this, "City ID is " + cityID, Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
@@ -70,26 +66,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "An Error has Occurred", Toast.LENGTH_SHORT).show();
                     }
                 });
-                queue.add(request);
 
-//                // Request a string response from the provided URL.
-//                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                        new Response.Listener<String>() {
-//                            @Override
-//                            public void onResponse(String response) {
-//                                Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
-//                            }
-//                        }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(MainActivity.this, "Error Occured", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
-                // Add the request to the RequestQueue.
-
-
-                //Toast.makeText(MainActivity.this, "You Clicked ME", Toast.LENGTH_SHORT).show();
+                MySingleton.getInstance(MainActivity.this).addToRequestQueue(request);
             }
         });
 
