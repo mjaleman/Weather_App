@@ -10,6 +10,7 @@ public class WeatherReportModel {
     private String applicable_date;
     private float min_temp;
     private float max_temp;
+    private float the_temp;
     private float wind_speed;
     private float wind_direction;
     private int air_pressure;
@@ -30,12 +31,16 @@ public class WeatherReportModel {
         this.applicable_date = applicable_date;
         this.min_temp = min_temp;
         this.max_temp = max_temp;
+        this.the_temp = the_temp;
         this.wind_speed = wind_speed;
         this.wind_direction = wind_direction;
         this.air_pressure = air_pressure;
         this.humidity = humidity;
         this.visibility = visibility;
         this.predictability = predictability;
+    }
+
+    public WeatherReportModel() {
     }
 
     @Override
@@ -120,6 +125,14 @@ public class WeatherReportModel {
 
     public void setMax_temp(float max_temp) {
         this.max_temp = max_temp;
+    }
+
+    public float getThe_temp() {
+        return the_temp;
+    }
+
+    public void setThe_temp(float the_temp) {
+        this.the_temp = the_temp;
     }
 
     public float getWind_speed() {
