@@ -87,10 +87,11 @@ public class WeatherDataService {
                     JSONArray consolidated_weather_list = response.getJSONArray("consolidated_weather");
 
                     // get the first item in the array
-                    WeatherReportModel one_day_weather = new WeatherReportModel();
 
                     for( int i = 0; i < consolidated_weather_list.length(); i++) {
-                        JSONObject first_day_from_api = (JSONObject) consolidated_weather_list.get(0);
+                        WeatherReportModel one_day_weather = new WeatherReportModel();
+                        JSONObject first_day_from_api = (JSONObject) consolidated_weather_list.get(i);
+
                         one_day_weather.setId(first_day_from_api.getInt("id"));
                         one_day_weather.setWeather_state_name(first_day_from_api.getString("weather_state_name"));
                         one_day_weather.setWeather_state_abbr(first_day_from_api.getString("weather_state_abbr"));
@@ -107,9 +108,9 @@ public class WeatherDataService {
                         one_day_weather.setVisibility(first_day_from_api.getLong("visibility"));
                         one_day_weather.setPredictability(first_day_from_api.getInt("predictability"));
                         weatherReportModels.add(one_day_weather);
-
-                        forecastByIDResponse.onResponse(weatherReportModels);
                     }
+
+                    forecastByIDResponse.onResponse(weatherReportModels);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -123,6 +124,37 @@ public class WeatherDataService {
         });
 
         MySingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public interface GetCityForecastByNameCallback {
+        void onError(String message);
+        void onResponse(List<WeatherReportModel> weatherReportModels);
+    }
+
+    public void getCityForecastByName (String cityName , GetCityForecastByNameCallback getCityForecastBYNameCallback){
+        getCityID(cityName, new VolleyResponseListener() {
+            @Override
+            public void onError(String message) {
+
+            }
+
+            @Override
+            public void onResponse(String cityID) {
+                // now we have the city ID
+                getCityForecastByID(cityID, new ForecastByIDResponse() {
+                    @Override
+                    public void onError(String message) {
+
+                    }
+
+                    @Override
+                    public void onResponse(List<WeatherReportModel> weatherReportModel) {
+                        // We have the weather report
+                        getCityForecastBYNameCallback.onResponse(weatherReportModel);
+                    }
+                });
+            }
+        });
     }
 }
 
